@@ -8,12 +8,20 @@ app = Flask(__name__)
 
 db = DBConnection()
 
+
 @app.route("/", methods=["GET"])
 def test():
     return jsonify({"Message": "OK"})
 
 
-@app.route("/upload", methods=["POST"])
+@app.route("/calendar", methods=["POST"])
+def create_calendar():
+    json = request.get_json()
+    db.insert_calendar(json["id"], json["title"], json["msg"], json["from"], json["to"])
+    return jsonify({"message": "Image uploaded successfully"})
+
+
+@app.route("/image", methods=["POST"])
 def upload():
     if request.method == "POST":
         imagefile = request.files["image"]

@@ -18,3 +18,22 @@ class DBConnection:
         except mysql.connector.Error as e:
             print(f"Error connecting to MariaDB Platform: {e.msg}")
             sys.exit(1)
+
+    def insert_calendar(self, id, title, msg, from_name, to_name):
+        if not self.conn.is_connected(): self.conn.reconnect()
+        print("inserting")
+        cursor = self.conn.cursor()
+
+
+        query = f"INSERT INTO calendars (c_id, title, christmas_msg, from_name, to_name) VALUES ('{id}', '{title}', '{msg}', '{from_name}', '{to_name}');"
+
+        try:
+
+            cursor.execute(query)
+
+            self.conn.commit()
+            print("success")
+        except mysql.connector.Error as e:
+            print(query)
+            print("")
+            pass
