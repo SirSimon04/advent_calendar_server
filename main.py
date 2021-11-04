@@ -1,21 +1,12 @@
 from flask import Flask, request, jsonify, send_file
 import werkzeug.utils as w
 import os
-import random
+from db_conn import DBConnection
 
 
 app = Flask(__name__)
 
-
-def random_image():
-    """
-    Return a random image from the ones in the static/ directory
-    """
-    img_dir = "./images"
-    img_list = os.listdir(img_dir)
-    img_path = os.path.join(img_dir, random.choice(img_list))
-    return img_path
-
+db = DBConnection()
 
 @app.route("/", methods=["GET"])
 def test():
@@ -31,12 +22,9 @@ def upload():
         return jsonify({"message": "Image uploaded successfully"})
 
 
-@app.route("/random", methods=["GET"])
-def image():
-    """
-    Returns a random image directly through send_file
-    """
-    image = random_image()
+@app.route("/image/<name>", methods=["GET"])
+def image(name):
+    image = os.path.join(f"images/{name}")
     return send_file(image, mimetype='image/png')
 
 
