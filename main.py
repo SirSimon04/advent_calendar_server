@@ -23,11 +23,11 @@ def create_calendar():
 
 @app.route("/image", methods=["POST"])
 def upload():
-    if request.method == "POST":
-        imagefile = request.files["image"]
+    for i in range(24):
+        imagefile = request.files[str(i)]
         filename = w.secure_filename(imagefile.filename)
         imagefile.save("./images/" + filename)
-        return jsonify({"message": "Image uploaded successfully"})
+    return jsonify({"message": "Images uploaded successfully"})
 
 
 @app.route("/image/<name>", methods=["GET"])
