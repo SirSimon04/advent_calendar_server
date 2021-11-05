@@ -25,6 +25,10 @@ def create_calendar():
 def get_calendar(id):
     result = db.get_calendar(id)
 
+    if not "id" in result:
+        resp = Response(json.dumps({"Message": "Nicht gefunden"}), 404, mimetype="application/json")
+        return resp
+
     resp = Response(json.dumps(result), 200, mimetype="application/json")
     resp.headers["Access-Control-Allow-Origin"] = "*"
 
