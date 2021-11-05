@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, Response
 import werkzeug.utils as w
 import os
 from db_conn import DBConnection
-
+import json
 
 app = Flask(__name__)
 
@@ -20,6 +20,15 @@ def create_calendar():
     db.insert_calendar(json["id"], json["title"], json["msg"], json["from"], json["to"])
     return jsonify({"message": "Image uploaded successfully"})
 
+
+@app.route("/calendar/<id>", methods=["GET"])
+def get_calendar(id):
+    result = db.get_calendar(id)
+
+    resp = Response(json.dumps(result), 200, mimetype="application/json")
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+
+    return resp
 
 @app.route("/image", methods=["POST"])
 def upload():

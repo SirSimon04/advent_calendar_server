@@ -37,3 +37,18 @@ class DBConnection:
             print(query)
             print("")
             pass
+
+    def get_calendar(self, id):
+        if not self.conn.is_connected(): self.conn.reconnect()
+        cursor = self.conn.cursor()
+
+        query = f"SELECT * FROM calendars WHERE c_id='{id}'"
+
+        cursor.execute(query)
+
+        data = {}
+        print(cursor)
+        for(id, title, msg, _, _) in cursor:
+            data = {"id": id, "title": title, "msg": msg,}
+
+        return data
