@@ -50,7 +50,7 @@ def get_calendar(id):
 
 @app.route("/image", methods=["POST"])
 def upload():
-    for i in range(1):
+    for i in range(24):
         imagefile = request.files[str(i)]
         filename = w.secure_filename(imagefile.filename)
         imagefile.save("./images/" + filename)
