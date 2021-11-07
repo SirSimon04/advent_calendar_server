@@ -30,17 +30,17 @@ def get_calendar(id):
         resp = Response(json.dumps({"Message": "Nicht gefunden"}), 404, mimetype="application/json")
         return resp
 
-    returnFileNames = [];
+    #returnFileNames = [];
 
-    allFileNames = glob.glob("./images/*")
+    #allFileNames = glob.glob("./images/*")
 
-    for fileName in allFileNames:
-        dId = fileName.split("/")[2]
-        dId = dId.split("_")[0]
-        if dId == id:
-            returnFileNames.append(fileName.split("/")[2])
+    #for fileName in allFileNames:
+        #dId = fileName.split("/")[2]
+        #dId = dId.split("_")[0]
+        #if dId == id:
+            #returnFileNames.append(fileName.split("/")[2])
 
-    result["fileNames"] = returnFileNames;
+    #result["fileNames"] = returnFileNames;
 
 
     resp = Response(json.dumps(result), 200, mimetype="application/json")
