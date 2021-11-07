@@ -3,6 +3,7 @@ import werkzeug.utils as w
 import os
 from db_conn import DBConnection
 import json
+import glob
 
 app = Flask(__name__)
 
@@ -29,6 +30,19 @@ def get_calendar(id):
         resp = Response(json.dumps({"Message": "Nicht gefunden"}), 404, mimetype="application/json")
         return resp
 
+    returnFileNames = [];
+
+    allFileNames = glob.glob("./images/*")
+
+    for fileName in allFileNames:
+        dId = fileName.split("/")[2]
+        dId = dId.split("_")[0]
+        if dId == id:
+            returnFileNames.append(fileName.split("/")[2])
+
+    result["fileNames"] = returnFileNames;
+
+
     resp = Response(json.dumps(result), 200, mimetype="application/json")
     resp.headers["Access-Control-Allow-Origin"] = "*"
 
@@ -36,7 +50,7 @@ def get_calendar(id):
 
 @app.route("/image", methods=["POST"])
 def upload():
-    for i in range(24):
+    for i in range(1):
         imagefile = request.files[str(i)]
         filename = w.secure_filename(imagefile.filename)
         imagefile.save("./images/" + filename)
@@ -44,7 +58,7 @@ def upload():
 
 
 @app.route("/image/<name>", methods=["GET"])
-def image(name):
+def get_image(name):
     image = os.path.join(f"images/{name}")
     return send_file(image, mimetype='image/png')
 
