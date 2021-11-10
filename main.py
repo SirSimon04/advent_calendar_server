@@ -18,7 +18,8 @@ def test():
 @app.route("/calendar", methods=["POST"])
 def create_calendar():
     json = request.get_json()
-    db.insert_calendar(json["id"], json["title"], json["msg"], json["from"], json["to"])
+    db.insert_calendar(json["id"], json["title"],
+                       json["msg"], json["from"], json["to"], json["bgId"], json["doorId"])
     return jsonify({"message": "Image uploaded successfully"})
 
 
@@ -27,26 +28,15 @@ def get_calendar(id):
     result = db.get_calendar(id)
 
     if not "id" in result:
-        resp = Response(json.dumps({"Message": "Nicht gefunden"}), 404, mimetype="application/json")
+        resp = Response(json.dumps(
+            {"Message": "Nicht gefunden"}), 404, mimetype="application/json")
         return resp
-
-    #returnFileNames = [];
-
-    #allFileNames = glob.glob("./images/*")
-
-    #for fileName in allFileNames:
-        #dId = fileName.split("/")[2]
-        #dId = dId.split("_")[0]
-        #if dId == id:
-            #returnFileNames.append(fileName.split("/")[2])
-
-    #result["fileNames"] = returnFileNames;
-
 
     resp = Response(json.dumps(result), 200, mimetype="application/json")
     resp.headers["Access-Control-Allow-Origin"] = "*"
 
     return resp
+
 
 @app.route("/image", methods=["POST"])
 def upload():
@@ -64,4 +54,4 @@ def get_image(name):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=8080)

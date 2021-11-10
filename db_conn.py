@@ -19,13 +19,13 @@ class DBConnection:
             print(f"Error connecting to MariaDB Platform: {e.msg}")
             sys.exit(1)
 
-    def insert_calendar(self, id, title, msg, from_name, to_name):
-        if not self.conn.is_connected(): self.conn.reconnect()
+    def insert_calendar(self, id, title, msg, from_name, to_name, bgId, doorId):
+        if not self.conn.is_connected():
+            self.conn.reconnect()
         print("inserting")
         cursor = self.conn.cursor()
 
-
-        query = f"INSERT INTO calendars (c_id, title, christmas_msg, from_name, to_name) VALUES ('{id}', '{title}', '{msg}', '{from_name}', '{to_name}');"
+        query = f"INSERT INTO calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES ('{id}', '{title}', '{msg}', '{from_name}', '{to_name}', '{bgId}', '{doorId}');"
 
         try:
 
@@ -39,7 +39,8 @@ class DBConnection:
             pass
 
     def get_calendar(self, id):
-        if not self.conn.is_connected(): self.conn.reconnect()
+        if not self.conn.is_connected():
+            self.conn.reconnect()
         cursor = self.conn.cursor()
 
         query = f"SELECT * FROM calendars WHERE c_id='{id}'"
@@ -48,7 +49,8 @@ class DBConnection:
 
         data = {}
         print(cursor)
-        for(id, title, msg, _, _) in cursor:
-            data = {"id": id, "title": title, "msg": msg,}
+        for(id, title, msg, _, _, bgId, doorId) in cursor:
+            data = {"id": id, "title": title, "msg": msg,
+                    "bgId": bgId, "doorId": doorId, }
 
         return data
