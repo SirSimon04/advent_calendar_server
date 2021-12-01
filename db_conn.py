@@ -23,9 +23,13 @@ class DBConnection:
         if not self.conn.is_connected():
             self.conn.reconnect()
         print("inserting")
-        cursor = self.conn.cursor()
+        cursor = self.conn.cursor(prepared=True)
 
         query = f"INSERT INTO calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES ('{id}', '{title}', '{msg}', '{from_name}', '{to_name}', '{bgId}', '{doorId}');"
+
+        insert = "INSERT into calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES (%s, %s, %s, %s, %s, %s, %s, )"
+
+        data = (id, title, msg, from_name, to_name, bgId, doorId)
 
         try:
 
