@@ -33,7 +33,7 @@ class DBConnection:
 
         try:
 
-            cursor.execute(query)
+            cursor.execute(insert, data)
 
             self.conn.commit()
             print("success")
