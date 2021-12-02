@@ -1,12 +1,20 @@
 import mysql.connector
 import sys
-import datetime
+import emoji
+import re
+
+
+def remove_emojis(text):
+    text = emoji.demojize(text)
+    text = re.sub(r'(:[!_\-\w]+:)', '', text)
+    return text
 
 
 class DBConnection:
     conn = None
 
     def __init__(self):
+        print(remove_emojis("hallo😀"))
         try:
             self.conn = mysql.connector.connect(
                 user="advent_calendar",
@@ -29,7 +37,7 @@ class DBConnection:
 
         insert = "INSERT into calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES (%s, %s, %s, %s, %s, %s, %s, )"
 
-        data = (id, title, msg, from_name, to_name, bgId, doorId)
+        data = (id, remove_emojis(title), remove_emojis(msg), from_name, to_name, bgId, doorId)
 
         try:
 
