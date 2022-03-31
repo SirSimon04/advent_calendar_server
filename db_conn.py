@@ -33,7 +33,7 @@ class DBConnection:
         print("inserting")
         cursor = self.conn.cursor(prepared=True)
 
-        query = f"INSERT INTO calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES ('{id}', '{title}', '{msg}', '{from_name}', '{to_name}', '{bgId}', '{doorId}');"
+        #query = f"INSERT INTO calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES ('{id}', '{title}', '{msg}', '{from_name}', '{to_name}', '{bgId}', '{doorId}');"
 
         insert = "INSERT into calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES (%s, %s, %s, %s, %s, %s, %s, )"
 
@@ -46,7 +46,7 @@ class DBConnection:
             self.conn.commit()
             print("success")
         except mysql.connector.Error as e:
-            print(query)
+            #print(query)
             print("")
             pass
 
@@ -55,9 +55,9 @@ class DBConnection:
             self.conn.reconnect()
         cursor = self.conn.cursor()
 
-        query = f"SELECT * FROM calendars WHERE c_id='{id}'"
+        query = f"SELECT * FROM calendars WHERE c_id=%s"
 
-        cursor.execute(query)
+        cursor.execute(query, (id))
 
         data = {}
         print(cursor)
