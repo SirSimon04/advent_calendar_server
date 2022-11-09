@@ -19,7 +19,7 @@ class DBConnection:
             self.conn = mysql.connector.connect(
                 user="advent_calendar",
                 password="Test123456!",
-                host="192.168.188.25",
+                host="192.168.178.2",
                 port=3306,
                 database="advent_calendar"
             )
@@ -31,12 +31,11 @@ class DBConnection:
         if not self.conn.is_connected():
             self.conn.reconnect()
         print("inserting")
-        cursor = self.conn.cursor(prepared=True)
+        cursor = self.conn.cursor(prepared=True,)
 
         #query = f"INSERT INTO calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES ('{id}', '{title}', '{msg}', '{from_name}', '{to_name}', '{bgId}', '{doorId}');"
 
-        insert = "INSERT into calendars (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES (%s, %s, %s, %s, %s, %s, %s, )"
-
+        insert = "INSERT into calendars  (c_id, title, christmas_msg, from_name, to_name, bg_id, door_id) VALUES (%s, %s, %s, %s, %s, %s, %s )"
         data = (id, remove_emojis(title), remove_emojis(msg), from_name, to_name, bgId, doorId)
 
         try:
@@ -46,6 +45,7 @@ class DBConnection:
             self.conn.commit()
             print("success")
         except mysql.connector.Error as e:
+            print(e)
             #print(query)
             print("")
             pass
@@ -57,7 +57,7 @@ class DBConnection:
 
         query = f"SELECT * FROM calendars WHERE c_id=%s"
 
-        cursor.execute(query, (id))
+        cursor.execute(query, (id,))
 
         data = {}
         print(cursor)
